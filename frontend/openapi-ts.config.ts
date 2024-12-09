@@ -2,7 +2,7 @@ import { defineConfig } from '@hey-api/openapi-ts';
 
 export default defineConfig({
   client: '@hey-api/client-axios',
-  input: 'https://raw.githubusercontent.com/swagger-api/swagger-petstore/master/src/main/resources/openapi.yaml',
+  input: 'http://127.0.0.1:8000/openapi.json',
   output: {
     format: 'prettier',
     path: './src/client',

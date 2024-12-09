@@ -1,21 +1,12 @@
-import i18next from 'i18next';
+import { createI18n } from 'vue-i18n'
 
 import uk from './locales/uk'
 
-// Define your translations
-const resources = {
-  en: {
-    translation: uk
-  }
-};
-
-// Initialize i18next
-i18next.init({
-  resources,
-  lng: 'en', // Default language
-  interpolation: {
-    escapeValue: false, // Not needed for Vue.js
+export default createI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages: {
+    en: uk,
+    uk: uk,
   },
-});
-
-export default i18next;
+})

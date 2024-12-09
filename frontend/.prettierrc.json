@@ -1,7 +1,26 @@
-
 {
-  "$schema": "https://json.schemastore.org/prettierrc",
+  "trailingComma": "es5",
+  "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
-  "printWidth": 100
+  "bracketSameLine": false,
+  "jsxBracketSameLine": false,
+  "bracketSpacing": true,
+  "printWidth": 80,
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "singleQuote": false
+      }
+    },
+    {
+      "files": ".*rc",
+      "options": {
+        "singleQuote": false,
+        "parser": "json"
+      }
+    }
+  ]
 }
