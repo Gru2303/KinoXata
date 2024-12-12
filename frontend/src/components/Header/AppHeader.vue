@@ -24,14 +24,43 @@
 
     <template #end>
       <b-navbar-item tag="div">
-        <div class="buttons">
-          <a class="button is-primary">
-            <strong>Sign up</strong>
-          </a>
-        </div>
+        <b-button type="is-primary" @click="isComponentModalActive = true">
+          <strong>{{ $t('navbar.signin') }}</strong>
+        </b-button>
       </b-navbar-item>
     </template>
   </b-navbar>
+
+  <b-modal
+      v-model="isComponentModalActive"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-label="Login"
+      close-button-aria-label="Close"
+      aria-modal
+  >
+        <div class="modal-card" style="width: auto">
+            <header class="modal-card-head">
+                <p class="modal-card-title">{{ $t('navbar.login.title') }}</p>
+
+                <button
+                    type="button"
+                    class="delete"
+                    @click="isComponentModalActive = false"
+                />
+            </header>
+
+            <section class="modal-card-body">
+              <div class="buttons">
+              <b-button type="is-primary" size="is-large" icon-left="google" outlined expanded>{{ $t('navbar.login.google') }}</b-button>
+              <b-button type="is-primary" size="is-large" icon-left="microsoft" outlined expanded disabled>{{ $t('navbar.login.microsoft') }}</b-button>
+              <b-button type="is-primary" size="is-large" icon-left="apple" outlined expanded disabled>{{ $t('navbar.login.apple') }}</b-button>
+              </div>
+            </section>
+        </div>
+  </b-modal>
 </template>
 
 <style lang="scss" scoped>
@@ -40,5 +69,12 @@
 }
 </style>
 
-<script setup lang="ts">
+<script lang="ts">
+export default {
+  data() {
+    return {
+      isComponentModalActive: false
+    }
+  }
+}
 </script>

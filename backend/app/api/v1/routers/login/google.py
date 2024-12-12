@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter
 
 import requests
+from requests import session
 from starlette.responses import Response
 
 from app.config import settings
@@ -16,9 +17,12 @@ router = APIRouter()
             response_model_exclude_none=True,
             operation_id="get_google_login_url")
 async def get_google_login_url():
-    login_url = settings.GOOGLE_LOGIN_URL.format(GOOGLE_CLIENT_ID=settings.GOOGLE_CLIENT_ID)
+    scope = "openid email profile"
 
-    return GoogleLoginResponse(login_url=login_url)
+    return GoogleLoginResponse(login_url=
+                               f"https://accounts.google.com/o/oauth2/v2/auth?client_id={settings.GOOGLE_CLIENT_ID}&"
+                               f"response_type=code&scope={scope}&"
+                               "redirect_uri=http://localhost:8000/api/v1/login/google/callback")
 
 
 @router.get("/callback",
@@ -57,5 +61,8 @@ async def get_google_login_url(code: Optional[str] = None):
 
     if user_info_response.status_code != 200:
         return GoogleHTTPErrorCode.INVALID_GOOGLE_USER_INFO_RESPONSE.response()
+
+    print(token_data)
+    print(user_info_response.json())
 
     return Response(status_code=200)

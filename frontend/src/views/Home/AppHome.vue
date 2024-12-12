@@ -47,7 +47,7 @@
 
 <script lang="ts">
 export default {
-    data(){
+    data() {
         return {
             carousels: [
                 { text: 'Slide - вцвфцвыфв', color: 'primary' },
