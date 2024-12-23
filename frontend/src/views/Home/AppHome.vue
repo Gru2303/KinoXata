@@ -7,20 +7,27 @@
       repeat
       interval="5000"
     >
-        <b-carousel-item v-for="(carousel, i) in carousels" :key="i">
+        <b-carousel-item v-for="(film, i) in afishaFilms" :key="i">
           <div class="hero carousel-image is-large has-text-centered"
-          style="background-image: url('https://planetakino.ua/res/get-poster/00000000000000000000000000004726/moana-2-afisha3.jpg');"
+          :style="`background-image: url('${film.afisha_image}');`"
           >
             <div class="overlay"></div>
             <div class="hero-body">
               <div class="container">
-                <h1 class="title is-1">{{carousel.text}}</h1>
-                <b-button type="is-primary" size="is-medium">Детальніше</b-button>
+                <h1 class="title is-1">{{ film.title }} - {{ (film.description as string).slice(0, 100) }}...</h1>
+                <b-button
+                  tag="router-link"
+                  :to="{ name: 'film', params: { id: film.id } }"
+                  type="is-primary"
+                  size="is-medium"
+                >Детальніше</b-button>
               </div>
             </div>
           </div>
         </b-carousel-item>
     </b-carousel>
+
+  <AppFilms />
 </template>
 
 <style lang="scss" scoped>
@@ -46,17 +53,22 @@
 </style>
 
 <script lang="ts">
+import AppFilms from '@/views/Films/AppFilms.vue'
+import { getMovies, type MovieResponse } from '@/client'
+
 export default {
-    data() {
-        return {
-            carousels: [
-                { text: 'Slide - вцвфцвыфв', color: 'primary' },
-                { text: 'Slide 2', color: 'info' },
-                { text: 'Slide 3', color: 'success' },
-                { text: 'Slide 4', color: 'warning' },
-                { text: 'Slide 5', color: 'danger' }
-            ]
-        }
+  components: { AppFilms },
+  data() {
+      return {
+          afishaFilms: [] as MovieResponse[]
+      }
+  },
+  async created() {
+    const response = await getMovies({ body: { limit: 5 } })
+
+    if (response.status == 200) {
+      this.afishaFilms = response.data as MovieResponse[]
     }
+  }
 }
 </script>

@@ -13,4 +13,4 @@ class GoogleHTTPErrorCode(ErrorResponseEnum):
 
 
 class GoogleLoginResponse(BaseModel):
-    login_url: str
+    url: str

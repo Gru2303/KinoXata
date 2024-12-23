@@ -1,13 +1,18 @@
-FROM node:lts-alpine
+# Frontend Dockerfile
+FROM node:16-alpine
 
+# Set working directory
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH
-
-RUN npm install @vue/cli@5.0.8 -g
-
-COPY package.json .
-COPY package-lock.json .
+# Install dependencies
+COPY package.json package-lock.json ./
 RUN npm install
 
+# Copy application code
+COPY . .
+
+# Expose Vue dev server port
+EXPOSE 5173
+
+# Run Vue development server
 CMD ["npm", "run", "dev"]

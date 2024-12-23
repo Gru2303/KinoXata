@@ -4,10 +4,13 @@ from fastapi import APIRouter
 
 import requests
 from requests import session
-from starlette.responses import Response
+from starlette.responses import Response, RedirectResponse
 
 from app.config import settings
 from app.api.v1.schemas.login.google import GoogleLoginResponse, GoogleHTTPErrorCode
+
+from app.db.crud import user
+from app.db.crud.token import create_token
 
 router = APIRouter()
 
@@ -19,7 +22,7 @@ router = APIRouter()
 async def get_google_login_url():
     scope = "openid email profile"
 
-    return GoogleLoginResponse(login_url=
+    return GoogleLoginResponse(url=
                                f"https://accounts.google.com/o/oauth2/v2/auth?client_id={settings.GOOGLE_CLIENT_ID}&"
                                f"response_type=code&scope={scope}&"
                                "redirect_uri=http://localhost:8000/api/v1/login/google/callback")
@@ -62,7 +65,22 @@ async def get_google_login_url(code: Optional[str] = None):
     if user_info_response.status_code != 200:
         return GoogleHTTPErrorCode.INVALID_GOOGLE_USER_INFO_RESPONSE.response()
 
-    print(token_data)
-    print(user_info_response.json())
+    user_info = user_info_response.json()
 
-    return Response(status_code=200)
+    user_data = await user.get_user(user_info.get("sub"))
+
+    if not user_data:
+        user_data = await user.create_user(user.UserModel(
+            platform_id=user_info.get("sub"),
+            email=user_info.get("email"),
+            name=user_info.get("name"),
+            picture=user_info.get("picture")
+        ))
+
+    raw_token, token = await create_token(user_data)
+
+    response = RedirectResponse("http://localhost/", status_code=301)
+
+    response.set_cookie("auth_token", raw_token, httponly=True, secure=True, samesite="strict")
+
+    return response
