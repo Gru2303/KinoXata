@@ -20,8 +20,8 @@ class Settings(BaseSettings):
                        "MCowBQYDK2VwAyEALBpYeqDs0G6ozySYWUx999Ig7Ebj6SQ7y6TfhY+aI+U="
                        "\n-----END PUBLIC KEY-----\n")
 
-    GOOGLE_CLIENT_ID: str = "1036942335380-fd7f5iu3f8e4v00sgjhood02tf04g0lh.apps.googleusercontent.com"
-    GOOGLE_CLIENT_SECRET: str = "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"
+    GOOGLE_CLIENT_ID: str = "you_id"
+    GOOGLE_CLIENT_SECRET: str = "you_secret"
 
 
 settings = Settings()
