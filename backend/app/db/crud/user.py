@@ -89,19 +89,12 @@ async def create_ticket(user_id: int, session_id: int, seats: typing.List[int]) 
 
     raw = f"{user_id}--{session_id}--{seats_str}"
 
-    print(raw)
-
     public_key_pem = private_key.public_key().public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo
     )
 
-    # Виводимо у PEM-форматі
-    print(public_key_pem.decode('utf-8'))
-
     secret = raw + "###" + base64.b64encode(private_key.sign(raw.encode("utf-8"))).decode("utf-8")
-
-    print(secret)
 
     model = UserTicketModel(
         user_id=user_id, session_id=session_id,
