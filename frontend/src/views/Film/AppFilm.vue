@@ -27,15 +27,21 @@
           <div class="box">
             <div class="column">
               <h1 class="title is-2">{{ $t('pages.film.sessions') }}</h1>
-              <h1 class="subtitle is-4" v-if="sessions.length == 0">{{ $t('pages.film.notsessions') }}</h1>
+              <div v-if="userStorage.isAuthenticated">
+                <h1 class="subtitle is-4" v-if="sessions.length == 0">{{ $t('pages.film.notsessions') }}</h1>
 
 
-              <div
-                v-for="session in sessions"
-                :key="session.id"
-                class="buttons"
-              >
-                <b-button type="is-primary" outlined @click="openModal(session)">{{ format(session.date, "dd.MM.yy HH:mm") }}</b-button>
+                <div
+                  v-for="session in sessions"
+                  :key="session.id"
+                  class="buttons"
+                >
+                  <b-button type="is-primary" outlined @click="openModal(session)">{{ format(session.date, "dd.MM.yy HH:mm") }}</b-button>
+                </div>
+              </div>
+
+              <div v-else>
+                <h1 class="subtitle is-4">Потрібна авторизація</h1>
               </div>
             </div>
           </div>
@@ -180,10 +186,12 @@ import {
   processPayment,
 } from '@/client'
 import router from '@/router'
+import { useUserStore } from '@/stores/user'
 
 export default {
   data() {
     return {
+      userStorage: useUserStore(),
       film: null as MovieResponse | null,
       sessions: [] as MovieSessionsResponse[],
       isComponentModalActive: false,

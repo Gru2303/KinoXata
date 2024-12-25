@@ -14,7 +14,7 @@ class MovieModel(Base):
     id: Mapped[int] = mapped_column(BigInteger, unique=True, primary_key=True)
 
     title: Mapped[str] = mapped_column(String(256), nullable=False)
-    description: Mapped[str] = mapped_column(String(512), nullable=True)
+    description: Mapped[str] = mapped_column(String(2048), nullable=True)
 
     image: Mapped[str] = mapped_column(String(256), nullable=True)
     afisha_image: Mapped[str] = mapped_column(String(256), nullable=True)

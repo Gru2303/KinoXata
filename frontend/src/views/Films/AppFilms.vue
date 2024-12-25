@@ -40,7 +40,7 @@
         >
           <div class="card">
             <div class="card-image">
-              <figure class="image is-4by3">
+              <figure class="image is-4by5">
                 <img :src="film.image as string" :alt="film.title" loading="lazy" />
               </figure>
             </div>

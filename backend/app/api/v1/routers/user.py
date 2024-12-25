@@ -79,28 +79,32 @@ async def get_ticket_by_sign_request(request: UserTicketSignRequest, user: UserM
     if user.permission.has(UserPermissions.ADMIN):
         result = await get_ticket_by_sign(request.sign)
 
-        seats_array = list(map(int, result.seats_busy.strip("[]").split(", ")))
-        film = result.session.film
+        if result:
+            seats_array = [] if result.seats_busy == "[]" else (
+                list(map(int, result.seats_busy.strip("[]").split(", "))))
+            film = result.session.film
 
-        return UserTicketResponse(
-            id=result.id,
-            film=MovieResponse(
-                id=film.id,
-                title=film.title,
-                description=film.description,
-                image=film.image,
-                afisha_image=film.afisha_image,
-                lang=film.lang,
-                genre=film.genre,
-                time=film.time,
-                trailer=film.trailer,
-                price=film.price,
-                create_time=film.create_time,
-                update_time=film.update_time
-            ),
-            seats=seats_array,
-            date=result.session.date,
-            secret=result.secret,
-        )
+            return UserTicketResponse(
+                id=result.id,
+                film=MovieResponse(
+                    id=film.id,
+                    title=film.title,
+                    description=film.description,
+                    image=film.image,
+                    afisha_image=film.afisha_image,
+                    lang=film.lang,
+                    genre=film.genre,
+                    time=film.time,
+                    trailer=film.trailer,
+                    price=film.price,
+                    create_time=film.create_time,
+                    update_time=film.update_time
+                ),
+                seats=seats_array,
+                date=result.session.date,
+                secret=result.secret,
+            )
+        else:
+            raise HTTPException(status_code=404, detail="Ticket not found")
 
     raise HTTPException(status_code=403, detail="Forbidden")
